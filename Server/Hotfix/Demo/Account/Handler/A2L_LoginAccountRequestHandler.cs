@@ -21,10 +21,16 @@ namespace ET
                 int zone = scene.GetComponent<LoginInfoRecordComponent>().Get(AccountId);
                 StartSceneConfig startSceneConfig = RealmGateAddressHelper.GetGate(zone, AccountId);
 
-                //todo
+                G2L_DisconnectGateUnit g2L_DisconnectGateUnit = (G2L_DisconnectGateUnit)await MessageHelper.CallActor(startSceneConfig.InstanceId, new L2G_DisconnectGateUnit()
+                {
+                    AccountId = AccountId
+                });
+                response.Error = g2L_DisconnectGateUnit.Error;
+                reply();
+
                 
             }
-            await ETTask.CompletedTask;
+            
         }
     }
 }

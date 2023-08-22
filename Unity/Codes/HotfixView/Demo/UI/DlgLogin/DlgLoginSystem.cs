@@ -36,8 +36,10 @@ namespace ET
 					return;
 				}
 				//TODO 显示登录之后的逻辑
-			}
-			catch(Exception e)
+				self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_Login);
+                self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Lobby);
+            }
+			catch (Exception e)
 			{
 				Log.Error(e.ToString());
 			}
