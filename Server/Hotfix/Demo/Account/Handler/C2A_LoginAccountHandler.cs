@@ -83,6 +83,19 @@ namespace ET
                         }
                         session.AddChild(account);
                     }
+
+                    long sessionId = session.DomainScene().GetComponent<AccountSessionsComponent>().Get(account.Id);
+                    Session otherSession = Game.EventSystem.Get(sessionId) as Session;
+                    if (otherSession != null)
+                    {
+                        otherSession.Send(new A2C_Disconnect() { Error = 0 });
+                        otherSession.Disconnect().Coroutine();
+                    }
+
+                    session.DomainScene().GetComponent<AccountSessionsComponent>().Add(account.Id, session.InstanceId);
+
+
+
                     string Token = TimeHelper.ServerNow().ToString() + RandomHelper.RandomNumber(int.MinValue, int.MaxValue).ToString();
                     session.DomainScene().GetComponent<TokenComponent>().Remove(account.Id);
                     session.DomainScene().GetComponent<TokenComponent>().Add(account.Id, Token);

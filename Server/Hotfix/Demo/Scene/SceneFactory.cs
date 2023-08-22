@@ -41,6 +41,7 @@ namespace ET
                     Log.Info("´´½¨ÕËºÅ·þ");
                     //scene.AddComponent<DBManagerComponent>();
                     scene.AddComponent<TokenComponent>();
+                    scene.AddComponent<AccountSessionsComponent>();
                     break;
             }
 
