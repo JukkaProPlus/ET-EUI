@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ET
 {
+    [ComponentOf(typeof(Session))]
     public class AccountCheckOutTimeComponent:Entity, IAwake<long>, IDestroy
     {
         public long Timer = 0;

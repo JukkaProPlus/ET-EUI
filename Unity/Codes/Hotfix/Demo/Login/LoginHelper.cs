@@ -13,19 +13,17 @@ namespace ET
             try
             {
                 accountSession = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(address));
+                password = MD5Helper.StringMD5(password);
                 a2C_LoginAccount = (A2C_LoginAccount)await accountSession.Call(new C2A_LoginAccount() { AccountName = account, Password = password });
 
             }
             catch (Exception e)
             {
                 Log.Error(e.ToString());
+                accountSession?.Dispose();
                 return ErrorCode.ERR_NetWorkError;
             }
-            finally
-            {
-                accountSession?.Dispose();
-            }
-            if (accountSession.Error != ErrorCode.ERR_Success)
+            if (a2C_LoginAccount.Error != ErrorCode.ERR_Success)
             {
                 Log.Error("登录失败");
                 accountSession?.Dispose();
@@ -34,6 +32,7 @@ namespace ET
             else
             {
                 zoneScene.AddComponent<SessionComponent>().Session = accountSession;
+                zoneScene.GetComponent<SessionComponent>().Session.AddComponent<PingComponent>();
                 Log.Info("登录成功");
                 zoneScene.GetComponent<AccountInfoComponent>().Token = a2C_LoginAccount.Token;
                 zoneScene.GetComponent<AccountInfoComponent>().AccountId = a2C_LoginAccount.AccountId;

@@ -34,14 +34,14 @@ namespace ET
                 session.Disconnect().Coroutine();
                 return;
             }
-            if (Regex.IsMatch(request.AccountName.Trim(), @"^[0-9]*$"))
+            if (!Regex.IsMatch(request.AccountName.Trim(), @"^[0-9]*$"))
             {
                 response.Error = ErrorCode.ERR_AccountNameInvalid;
                 reply();
                 session.Disconnect().Coroutine();
                 return;
             }
-            if (Regex.IsMatch(request.Password, @"^[0-9]*$"))
+            if (!Regex.IsMatch(request.Password, @"^[0-9]*$"))
             {
                 response.Error = ErrorCode.ERR_PasswordInvalid;
                 reply();
@@ -84,6 +84,17 @@ namespace ET
                         session.AddChild(account);
                     }
 
+                    StartSceneConfig startSceneConfig = StartSceneConfigCategory.Instance.GetBySceneName(session.DomainZone(), "LoginCenter");
+                    long LoginCenterInstanceId = startSceneConfig.InstanceId;
+                    L2A_LoginAccount l2a_LoginAccount = (L2A_LoginAccount)await ActorMessageSenderComponent.Instance.Call(LoginCenterInstanceId, new A2L_LoginAccount() { AccountId = account.Id });
+                    if (l2a_LoginAccount.Error != ErrorCode.ERR_Success)
+                    {
+                        response.Error = l2a_LoginAccount.Error;
+                        reply();
+                        session?.Disconnect().Coroutine();
+                        account.Dispose();
+                        return;
+                    }
                     long sessionId = session.DomainScene().GetComponent<AccountSessionsComponent>().Get(account.Id);
                     Session otherSession = Game.EventSystem.Get(sessionId) as Session;
                     if (otherSession != null)
@@ -93,7 +104,7 @@ namespace ET
                     }
 
                     session.DomainScene().GetComponent<AccountSessionsComponent>().Add(account.Id, session.InstanceId);
-
+                    session.AddComponent<AccountCheckOutTimeComponent, long>(account.Id);
 
 
                     string Token = TimeHelper.ServerNow().ToString() + RandomHelper.RandomNumber(int.MinValue, int.MaxValue).ToString();
