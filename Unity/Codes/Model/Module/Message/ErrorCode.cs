@@ -22,5 +22,8 @@ namespace ET
         public const int ERR_AccountBlocked = 200008;
         public const int ERR_PasswordError = 200009;
         public const int ERR_RequestRepeated = 200010;
+        public const int ERR_TokenError = 200011;
+        public const int ERR_RoleNameError = 200012;
+        public const int ERR_RoleNameExist = 200013;
     }
 }

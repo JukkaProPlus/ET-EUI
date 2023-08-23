@@ -1,5 +1,6 @@
 using System;
-
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ET
 {
@@ -72,6 +73,64 @@ namespace ET
             //{
             //    Log.Error(e);
             //}
+        }
+        public async static ETTask<int> GetServerInfos(Scene zoneScene)
+        {
+            A2C_GetServerInfos a2C_GetServerInfos;
+            try
+            {
+                 a2C_GetServerInfos = (A2C_GetServerInfos)await zoneScene.GetComponent<SessionComponent>().Session.Call(
+                     new C2A_GetServerInfos() { 
+                         AccountId = zoneScene.GetComponent<AccountInfoComponent>().AccountId,
+                         Token = zoneScene.GetComponent<AccountInfoComponent>().Token
+                     });
+                if (a2C_GetServerInfos.Error != ErrorCode.ERR_Success)
+                {
+                    return a2C_GetServerInfos.Error;
+                }
+                //a2C_GetServerInfos.ServerInfosList.Select(
+                //info => { return new ServerInfo().FromMessage(info); }
+                //).ToList();
+                foreach(ServerInfoProto info in a2C_GetServerInfos.ServerInfosList)
+                {
+                    ServerInfo serverInfo = zoneScene.GetComponent<ServerInfosComponent>().AddChild<ServerInfo>();
+                    serverInfo.FromMessage(info);
+                    zoneScene.GetComponent<ServerInfosComponent>().Add(serverInfo);
+                }
+                return ErrorCode.ERR_Success;
+            }
+            catch(Exception e)
+            {
+                Log.Error(e.ToString());
+                return ErrorCode.ERR_NetWorkError;
+            }
+        }
+        public async static ETTask<int> CreateRole(Scene zoneScene, string Name)
+        {
+            A2C_CreateRole a2C_CreateRole = null;
+            try
+            {
+                C2A_CreateRole c2A_CreateRole = new C2A_CreateRole() {
+                    AccountId = zoneScene.GetComponent<AccountInfoComponent>().AccountId,
+                    Token = zoneScene.GetComponent<AccountInfoComponent>().Token,
+                    Name = Name,
+                    ServerId = 1,//zoneScene.GetComponent<ServerInfosComponent>().GetSelectServer().ServerId
+                };
+                a2C_CreateRole = (A2C_CreateRole) await zoneScene.GetComponent<SessionComponent>().Session.Call(c2A_CreateRole);
+            }
+            catch(Exception e)
+            {
+                Log.Error(e.ToString());
+                return ErrorCode.ERR_NetWorkError;
+            }
+            if (a2C_CreateRole.Error != ErrorCode.ERR_Success)
+            {
+                Log.Error(a2C_CreateRole.Error.ToString());
+                return a2C_CreateRole.Error;
+            }
+
+            await ETTask.CompletedTask;
+            return ErrorCode.ERR_Success;
         }
     }
 }
