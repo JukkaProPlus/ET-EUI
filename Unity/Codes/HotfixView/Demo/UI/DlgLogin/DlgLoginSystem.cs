@@ -35,9 +35,15 @@ namespace ET
 					Log.Error(errcode.ToString());
 					return;
 				}
-				//TODO 显示登录之后的逻辑
+				errcode = await LoginHelper.GetServerInfos(self.ZoneScene());
+				if (errcode != ErrorCode.ERR_Success)
+				{
+					Log.Error(errcode.ToString());
+					return;
+				}
+				
 				self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_Login);
-                self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Lobby);
+                //self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Server);//todo
             }
 			catch (Exception e)
 			{
