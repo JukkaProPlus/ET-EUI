@@ -5,7 +5,8 @@ using System.Linq;
 namespace ET
 {
     [FriendClass(typeof(ET.AccountInfoComponent))]
-    [FriendClass(typeof(RoleInfosComponent))]
+    [FriendClass(typeof(ET.RoleInfosComponent))]
+    [FriendClass(typeof(ET.ServerInfosComponent))]
     public static class LoginHelper
     {
         public static async ETTask<int> Login(Scene zoneScene, string address, string account, string password)
@@ -115,7 +116,7 @@ namespace ET
                     AccountId = zoneScene.GetComponent<AccountInfoComponent>().AccountId,
                     Token = zoneScene.GetComponent<AccountInfoComponent>().Token,
                     Name = Name,
-                    ServerId = (int)zoneScene.GetComponent<RoleInfosComponent>().CurrentRoleId
+                    ServerId = (int)zoneScene.GetComponent<ServerInfosComponent>().CurrentServerId
                 };
                 a2C_CreateRole = (A2C_CreateRole) await zoneScene.GetComponent<SessionComponent>().Session.Call(c2A_CreateRole);
             }
@@ -136,6 +137,40 @@ namespace ET
                 newRoleInfo.FromMessage(a2C_CreateRole.RoleInfo);
                 zoneScene.GetComponent<RoleInfosComponent>().RoleInfos.Add(newRoleInfo);
                 //zoneScene.GetComponent<RoleInfosComponent>().CurrentRoleId = newRoleInfo.Id;
+                return ErrorCode.ERR_Success;
+            }
+        }
+        public async static ETTask<int> GetRoles(Scene zoneScene)
+        {
+            A2C_GetRoles a2C_GetRoles;
+            try
+            {
+                C2A_GetRoles c2A_GetRoles = new C2A_GetRoles()
+                {
+                    Token = zoneScene.GetComponent<AccountInfoComponent>().Token,
+                    AccountId = zoneScene.GetComponent<AccountInfoComponent>().AccountId,
+                    ServerId = (int)zoneScene.GetComponent<ServerInfosComponent>().CurrentServerId
+                };
+                a2C_GetRoles = (A2C_GetRoles)await zoneScene.GetComponent<SessionComponent>().Session.Call(c2A_GetRoles);
+            }
+            catch(Exception e)
+            {
+                Log.Error(e.ToString());
+                return ErrorCode.ERR_NetWorkError;
+            }
+            if (a2C_GetRoles.Error != ErrorCode.ERR_Success)
+            {
+                Log.Error(a2C_GetRoles.Error.ToString());
+                return a2C_GetRoles.Error;
+            }
+            else
+            {
+                foreach(RoleInfoProto info in a2C_GetRoles.RoleInfos)
+                {
+                    RoleInfo roleInfo = zoneScene.GetComponent<RoleInfosComponent>().AddChild<RoleInfo>();
+                    roleInfo.FromMessage(info);
+                    zoneScene.GetComponent<RoleInfosComponent>().RoleInfos.Add(roleInfo);
+                }
                 return ErrorCode.ERR_Success;
             }
         }

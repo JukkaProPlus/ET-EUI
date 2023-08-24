@@ -43,7 +43,7 @@ namespace ET
 				}
 				
 				self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_Login);
-                //self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Server);//todo
+				self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Server);
             }
 			catch (Exception e)
 			{
