@@ -34,13 +34,13 @@ namespace ET
                 session.Disconnect().Coroutine();
                 return;
             }
-            if (!Regex.IsMatch(request.AccountName.Trim(), @"^[0-9]*$"))
-            {
-                response.Error = ErrorCode.ERR_AccountNameInvalid;
-                reply();
-                session.Disconnect().Coroutine();
-                return;
-            }
+            //if (!Regex.IsMatch(request.AccountName.Trim(), @"^[0-9]*$"))
+            //{
+            //    response.Error = ErrorCode.ERR_AccountNameInvalid;
+            //    reply();
+            //    session.Disconnect().Coroutine();
+            //    return;
+            //}
             //if (!Regex.IsMatch(request.Password, @"^[0-9]*$"))
             //{
             //    response.Error = ErrorCode.ERR_PasswordInvalid;

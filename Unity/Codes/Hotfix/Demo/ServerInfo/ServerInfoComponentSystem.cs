@@ -18,13 +18,13 @@ namespace ET
             self.serverInfoList = null;
         }
     }
-    //public class ServerInfoComponentAwakeSystem : AwakeSystem<ServerInfosComponent>
-    //{
-    //    public override void Awake(ServerInfosComponent self)
-    //    {
-
-    //    }
-    //}
+    public class ServerInfoComponentAwakeSystem : AwakeSystem<ServerInfosComponent>
+    {
+        public override void Awake(ServerInfosComponent self)
+        {
+            self.serverInfoList = new List<ServerInfo>();
+        }
+    }
     [FriendClass(typeof(ServerInfosComponent))]
     public static class ServerInfoComponentSystem
     {

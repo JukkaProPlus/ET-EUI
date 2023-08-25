@@ -203,5 +203,6 @@ namespace ET
 		private UnityEngine.UI.Image m_E_RoleNameImage = null;
 		private UnityEngine.UI.LoopVerticalScrollRect m_E_RolesLoopVerticalScrollRect = null;
 		public Transform uiTransform = null;
-	}
+        public object ScrollItemRoles;
+    }
 }
