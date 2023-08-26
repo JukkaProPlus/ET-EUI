@@ -16,7 +16,5 @@ namespace ET
     {
         public int Status;
         public string ServerName;
-        //public int ServerId;
-
     }
 }

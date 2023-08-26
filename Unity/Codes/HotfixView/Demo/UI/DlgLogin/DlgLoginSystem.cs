@@ -49,7 +49,7 @@ namespace ET
 			{
 				Log.Error(e.ToString());
 			}
-			
+
 		}
 		
 		public static void HideWindow(this DlgLogin self)

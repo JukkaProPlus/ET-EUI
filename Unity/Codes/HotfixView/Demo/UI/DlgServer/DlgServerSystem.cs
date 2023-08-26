@@ -21,6 +21,7 @@ namespace ET
         {
             Scroll_Item_serverTest serverTest = self.ScrollItemServerTests[index].BindTrans(transform);
             ServerInfo info = self.ZoneScene().GetComponent<ServerInfosComponent>().serverInfoList[index];
+            Log.Debug($"index = {index},info.Id = {info.Id}, self.ZoneScene().GetComponent<ServerInfosComponent>().CurrentServerId = {self.ZoneScene().GetComponent<ServerInfosComponent>().CurrentServerId}");
             serverTest.EI_serverTestImage.color = info.Id == self.ZoneScene().GetComponent<ServerInfosComponent>().CurrentServerId ? Color.red : Color.yellow;
             serverTest.E_serverTestTipText.SetText(info.ServerName);
             serverTest.E_SelectButton.AddListener(() => { self.OnSelectServerItemHandler((int)info.Id); });
@@ -35,6 +36,7 @@ namespace ET
         public static void ShowWindow(this DlgServer self, Entity contextData = null)
         {
             int count = self.ZoneScene().GetComponent<ServerInfosComponent>().serverInfoList.Count;
+            Log.Debug($"count = {count}");
             self.AddUIScrollItems(ref self.ScrollItemServerTests, count);
             self.View.E_ServerListLoopVerticalScrollRect.SetVisible(true, count);
         }
