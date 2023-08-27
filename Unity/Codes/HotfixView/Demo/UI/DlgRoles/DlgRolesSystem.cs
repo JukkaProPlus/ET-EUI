@@ -87,6 +87,27 @@ namespace ET
         public async static ETTask OnConfirmClickHandler(this DlgRoles self)
         {
             Log.Debug("开始按钮");
+
+            if (self.ZoneScene().GetComponent<RoleInfosComponent>().CurrentRoleId == 0)
+            {
+                Log.Error($"没有选择角色");
+                return;
+            }
+
+            try
+            {
+                int code = await LoginHelper.GetRealmKey(self.ZoneScene());
+                if (code != ErrorCode.ERR_Success)
+                {
+                    Log.Error(code.ToString());
+                    return;
+                }
+                
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.ToString());
+            }
             await ETTask.CompletedTask;
             //self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_Roles);
             //self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Lobby);

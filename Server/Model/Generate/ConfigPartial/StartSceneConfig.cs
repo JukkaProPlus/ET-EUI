@@ -7,6 +7,7 @@ namespace ET
     public partial class StartSceneConfigCategory
     {
         public MultiMap<int, StartSceneConfig> Gates = new MultiMap<int, StartSceneConfig>();
+        public Dictionary<int, StartSceneConfig> Realms = new Dictionary<int, StartSceneConfig>();
         
         public MultiMap<int, StartSceneConfig> ProcessScenes = new MultiMap<int, StartSceneConfig>();
         
@@ -48,6 +49,9 @@ namespace ET
                         break;
                     case SceneType.Robot:
                         this.Robots.Add(startSceneConfig);
+                        break;
+                    case SceneType.Realm:
+                        this.Realms.Add(startSceneConfig.Zone, startSceneConfig);
                         break;
                 }
             }

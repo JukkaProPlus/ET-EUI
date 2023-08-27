@@ -201,5 +201,36 @@ namespace ET
             Log.Error(a2C_DeleteRole.Error.ToString());
             return a2C_DeleteRole.Error;
         }
+
+        public async static ETTask<int> GetRealmKey(Scene zoneScene)
+        {
+            A2C_GetRealmKey a2CGetRealmKey = null; 
+            try
+            {
+                a2CGetRealmKey = (A2C_GetRealmKey)await zoneScene.GetComponent<SessionComponent>().Session.Call(new C2A_GetRealmKey()
+                {
+                    Token = zoneScene.GetComponent<AccountInfoComponent>().Token,
+                    AccountId = zoneScene.GetComponent<AccountInfoComponent>().AccountId,
+                    ServerId = zoneScene.GetComponent<ServerInfosComponent>().CurrentServerId
+                });
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.ToString());
+                return ErrorCode.ERR_NetWorkError;
+            }
+
+            if (a2CGetRealmKey.Error != ErrorCode.ERR_Success)
+            {
+                Log.Error(a2CGetRealmKey.Error.ToString());
+                return a2CGetRealmKey.Error;
+            }
+            else
+            {
+                zoneScene.GetComponent<AccountInfoComponent>().RealmAddress = a2CGetRealmKey.RealmAddress;
+                zoneScene.GetComponent<AccountInfoComponent>().RealmKey = a2CGetRealmKey.RealmKey;
+                return ErrorCode.ERR_Success;
+            }
+        }
     }
 }

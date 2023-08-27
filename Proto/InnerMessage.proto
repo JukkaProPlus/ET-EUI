@@ -182,3 +182,18 @@ message G2L_DisconnectGateUnit // IActorResponse
 	int32 Error = 91;
 	string Message = 92;
 }
+
+//ResponseType R2A_GetRealmKey
+message A2R_GetRealmKey // IActorRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+
+message R2A_GetRealmKey // IActorResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	string RealmKey = 1;
+}
