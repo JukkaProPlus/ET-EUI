@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace ET
 {
@@ -229,8 +230,51 @@ namespace ET
             {
                 zoneScene.GetComponent<AccountInfoComponent>().RealmAddress = a2CGetRealmKey.RealmAddress;
                 zoneScene.GetComponent<AccountInfoComponent>().RealmKey = a2CGetRealmKey.RealmKey;
+                zoneScene.GetComponent<SessionComponent>().Session.Dispose();
                 return ErrorCode.ERR_Success;
             }
+        }
+
+        public async static ETTask<int> EnterGame(Scene zoneScene)
+        {
+            string realmAddress = zoneScene.GetComponent<AccountInfoComponent>().RealmAddress;
+            R2C_LoginRealm r2C_LoginRealm = null;
+            Session session = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(realmAddress));
+            try
+            {
+                r2C_LoginRealm = (R2C_LoginRealm)await session.Call(new C2R_LoginRealm()
+                {
+                    AccountId = zoneScene.GetComponent<AccountInfoComponent>().AccountId,
+                    RealmTokenKey = zoneScene.GetComponent<AccountInfoComponent>().RealmKey,
+                });
+                
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.ToString());
+                session?.Dispose();
+                return ErrorCode.ERR_NetWorkError;
+            }
+            session?.Dispose();
+
+            if (r2C_LoginRealm.Error != ErrorCode.ERR_Success)
+            {
+                Log.Error(r2C_LoginRealm.Error.ToString());
+                return r2C_LoginRealm.Error;
+            }
+
+            Log.Warning($"GateAddress:{r2C_LoginRealm.GateAddress}");
+            Session gateSession = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(r2C_LoginRealm.GateAddress));
+            gateSession.AddComponent<PingComponent>();
+            zoneScene.GetComponent<SessionComponent>().Session = gateSession;
+            
+            //2.开始连接Gate
+            
+            
+            
+            
+            await ETTask.CompletedTask;
+            return ErrorCode.ERR_Success;
         }
     }
 }

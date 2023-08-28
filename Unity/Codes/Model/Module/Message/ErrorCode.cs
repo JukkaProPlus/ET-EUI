@@ -26,5 +26,6 @@ namespace ET
         public const int ERR_RoleNameError = 200012;
         public const int ERR_RoleNameExist = 200013;
         public const int ERR_RoleNotExist = 200014;
+        public const int ERR_RequestSceneTypeError = 200015;
     }
 }

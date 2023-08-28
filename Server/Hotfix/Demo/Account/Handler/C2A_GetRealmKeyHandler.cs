@@ -12,14 +12,14 @@ namespace ET
                 session.Dispose();
                 return;
             }
-
+        
             if (session.GetComponent<SessionLockingComponent>() != null)
             {
                 response.Error = ErrorCode.ERR_RequestRepeated;
                 reply();
                 return;
             }
-
+        
             string token = session.DomainScene().GetComponent<TokenComponent>().Get(request.AccountId);
             if (token == null || token != request.Token)
             {
@@ -28,7 +28,7 @@ namespace ET
                 session.Disconnect().Coroutine();
                 return;
             }
-
+        
             using (session.AddComponent<SessionLockingComponent>())
             {
                 using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.LoginAccount, request.AccountId.GetHashCode()))
@@ -50,5 +50,6 @@ namespace ET
             }
             await ETTask.CompletedTask;
         }
+        
     }
 }

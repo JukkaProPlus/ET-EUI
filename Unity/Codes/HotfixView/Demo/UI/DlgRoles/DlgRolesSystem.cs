@@ -102,7 +102,14 @@ namespace ET
                     Log.Error(code.ToString());
                     return;
                 }
-                
+
+                code = await LoginHelper.EnterGame(self.ZoneScene());
+                if (code != ErrorCode.ERR_Success)
+                {
+                    Log.Error(code.ToString());
+                    return;
+                }
+
             }
             catch (Exception e)
             {
