@@ -22,5 +22,38 @@ namespace ET
             }
             self.Dispose();
         }
+
+        public static async ETTask KickPlayer(Player player)
+        {
+            if (player == null || player.IsDisposed)
+            {
+                return;
+            }
+            long instanceId = player.InstanceId;
+            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.LoginGate, player.Account.GetHashCode()))
+            {
+                if(player.IsDisposed || player.InstanceId != instanceId)
+                {
+                    return;
+                }
+
+                switch (player.playerState)
+                {
+                    case PlayerState.Game:
+                        //todo 通知游戏逻辑服下线Unit角色逻辑，并将数据存入数据库
+                        break;
+                    case PlayerState.Gate:
+                        break;
+                    case PlayerState.DisConnect:
+                        break;
+                }
+
+                player.playerState = PlayerState.DisConnect;
+                player.DomainScene().GetComponent<PlayerComponent>().Remove(player.Account);
+                player?.Dispose();
+                await TimerComponent.Instance.WaitAsync(3000);
+            }
+            await ETTask.CompletedTask;
+        }
     }
 }

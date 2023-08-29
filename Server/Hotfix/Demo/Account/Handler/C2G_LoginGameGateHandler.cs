@@ -55,7 +55,7 @@ namespace ET
                         session?.Disconnect().Coroutine();
                         return;
                     }
-                    Player player = domainScene.GetComponent<PlayerComponent>().Get(request.RoleId);
+                    Player player = domainScene.GetComponent<PlayerComponent>().Get(request.Account);
                     if (player == null)
                     {
                         //添加一个新的GateUnit
@@ -72,6 +72,7 @@ namespace ET
                     }
                     session.AddComponent<SessionPlayerComponent>().PlayerId = player.Id;
                     session.GetComponent<SessionPlayerComponent>().PlayerInstanceId = player.InstanceId;
+                    session.GetComponent<SessionPlayerComponent>().AccountId = player.Account;
                     player.SessionInstanceId = session.InstanceId;
                 }
             }
