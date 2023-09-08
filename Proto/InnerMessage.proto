@@ -228,3 +228,17 @@ message L2G_AddLoginRecord //IActorResponse
 	int32 Error = 91;
 	string Message = 92;
 }
+
+
+//ResponseType M2G_RequestEnterGameState
+message G2M_RequestEnterGameState //IActorLocationRequest
+{
+	int32 RpcId = 90;
+}
+
+message M2G_RequestEnterGameState //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}

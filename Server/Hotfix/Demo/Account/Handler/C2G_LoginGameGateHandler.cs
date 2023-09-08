@@ -3,6 +3,7 @@ using System;
 namespace ET
 {
     [FriendClass(typeof(SessionPlayerComponent))]
+    [FriendClass(typeof(SessionStateComponent))]
     public class C2G_LoginGameGateHandler:AMRpcHandler<C2G_LoginGameGate, G2C_LoginGameGate>
     {
         protected async override ETTask Run(Session session, C2G_LoginGameGate request, G2C_LoginGameGate response, Action reply)
@@ -17,14 +18,18 @@ namespace ET
 
             if (session.GetComponent<SessionLockingComponent>() != null)
             {
+
                 response.Error = ErrorCode.ERR_RequestRepeated;
                 reply();
                 return;
             }
+
             Scene domainScene = session.DomainScene();
             string token = domainScene.GetComponent<GateSessionKeyComponent>().Get(request.Account);
+
             if (token == null || token != request.Key)
             {
+
                 response.Error = ErrorCode.ERR_ConnectGateKeyError;
                 response.Message = "Gate Key验证失败";
                 reply();
@@ -33,7 +38,7 @@ namespace ET
             }
 
             domainScene.GetComponent<GateSessionKeyComponent>().Remove(request.Account);
-            long instanceId = domainScene.InstanceId;
+            long instanceId = session.InstanceId;
             
 
             using (session.AddComponent<SessionLockingComponent>())
@@ -44,20 +49,32 @@ namespace ET
                     {
                         return;
                     }
+
                     //通知登陆中心服，记录本次登陆的服务器zone
                     StartSceneConfig loginCenterConfig = StartSceneConfigCategory.Instance.LoginCenterConfig;
                     L2G_AddLoginRecord l2G_AddLoginRecord = (L2G_AddLoginRecord)await MessageHelper.CallActor(loginCenterConfig.InstanceId, new G2L_AddLoginRecord() { AccountId = request.Account, ServerId = domainScene.Zone, });
                     if (l2G_AddLoginRecord.Error != ErrorCode.ERR_Success)
                     {
+
                         Log.Error(l2G_AddLoginRecord.Error.ToString());
                         response.Error = l2G_AddLoginRecord.Error;
                         reply();
                         session?.Disconnect().Coroutine();
                         return;
                     }
+
+                    SessionStateComponent sessionStateComponent = session.GetComponent<SessionStateComponent>();
+                    if (null == sessionStateComponent)
+                    {
+                        sessionStateComponent = session.AddComponent<SessionStateComponent>();
+                    }
+
+                    sessionStateComponent.State = SessionState.Normal;
+                    
                     Player player = domainScene.GetComponent<PlayerComponent>().Get(request.Account);
                     if (player == null)
                     {
+
                         //添加一个新的GateUnit
                         player = domainScene.GetComponent<PlayerComponent>()
                                 .AddChildWithId<Player, long, long>(request.RoleId, request.Account, request.RoleId);
@@ -67,16 +84,20 @@ namespace ET
                     }
                     else
                     {
-                        // player.RemoveComponent<PlayerOfflineOutTimeComponent>();
-                        
+
+                        player.RemoveComponent<PlayerOfflineOutTimeComponent>();
                     }
                     session.AddComponent<SessionPlayerComponent>().PlayerId = player.Id;
                     session.GetComponent<SessionPlayerComponent>().PlayerInstanceId = player.InstanceId;
                     session.GetComponent<SessionPlayerComponent>().AccountId = player.Account;
-                    player.SessionInstanceId = session.InstanceId;
+                    player.ClientSession = session;
+
                 }
             }
+
+            reply();
             await ETTask.CompletedTask;
+            
         }
     }
 }
