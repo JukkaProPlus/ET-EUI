@@ -23,14 +23,14 @@ namespace ET
     {
         public override void Awake(PlayerOfflineOutTimeComponent self)
         {
-            TimerComponent.Instance.Remove(ref self.Timer);
+            self.Timer = TimerComponent.Instance.NewOnceTimer(TimeHelper.ServerNow() + 10000, TimerType.PlayerOfflineOutTime, self);
         }
     }
     public class PlayerOfflineOutTimeComponentDestroySystem:DestroySystem<PlayerOfflineOutTimeComponent>
     {
         public override void Destroy(PlayerOfflineOutTimeComponent self)
         {
-            self.Timer = 0;
+            TimerComponent.Instance.Remove(ref self.Timer);
         }
     }
 

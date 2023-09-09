@@ -23,7 +23,7 @@ namespace ET
             self.Dispose();
         }
 
-        public static async ETTask KickPlayer(Player player)
+        public static async ETTask KickPlayer(Player player, bool isException = false)
         {
             if (player == null || player.IsDisposed)
             {
@@ -37,16 +37,21 @@ namespace ET
                     return;
                 }
 
-                switch (player.playerState)
+                if (!isException)
                 {
-                    case PlayerState.Game:
-                        //todo 通知游戏逻辑服下线Unit角色逻辑，并将数据存入数据库
-                        break;
-                    case PlayerState.Gate:
-                        break;
-                    case PlayerState.DisConnect:
-                        break;
+                    switch (player.playerState)
+                    {
+                        case PlayerState.Game:
+                            //todo 通知游戏逻辑服下线Unit角色逻辑，并将数据存入数据库
+                            break;
+                        case PlayerState.Gate:
+                            break;
+                        case PlayerState.DisConnect:
+                            break;
+                    }
                 }
+
+                
 
                 player.playerState = PlayerState.DisConnect;
                 player.DomainScene().GetComponent<PlayerComponent>().Remove(player.Account);
