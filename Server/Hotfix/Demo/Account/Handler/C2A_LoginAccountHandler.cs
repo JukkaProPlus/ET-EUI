@@ -24,14 +24,14 @@ namespace ET
             {
                 response.Error = ErrorCode.ERR_RequestRepeated;
                 reply();
-                session.Disconnect().Coroutine();
+                // session.Disconnect().Coroutine();
                 return;
             }
             if (string.IsNullOrEmpty(request.AccountName) || string.IsNullOrEmpty(request.Password))
             {
                 response.Error = ErrorCode.ERR_AccountOrPasswordError;
                 reply();
-                session.Disconnect().Coroutine();
+                // session.Disconnect().Coroutine();
                 return;
             }
             //if (!Regex.IsMatch(request.AccountName.Trim(), @"^[0-9]*$"))

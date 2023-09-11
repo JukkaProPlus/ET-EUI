@@ -22,23 +22,23 @@ namespace ET
 
             switch (scene.SceneType)
             {
-                case SceneType.Realm:
+                case SceneType.Realm://负载均衡服务器
                     scene.AddComponent<NetKcpComponent, IPEndPoint, int>(startSceneConfig.OuterIPPort, SessionStreamDispatcherType.SessionStreamDispatcherServerOuter);
                     scene.AddComponent<TokenComponent>();
                     break;
-                case SceneType.Gate:
+                case SceneType.Gate://网关服
                     scene.AddComponent<NetKcpComponent, IPEndPoint, int>(startSceneConfig.OuterIPPort, SessionStreamDispatcherType.SessionStreamDispatcherServerOuter);
                     scene.AddComponent<PlayerComponent>();
                     scene.AddComponent<GateSessionKeyComponent>();
                     break;
-                case SceneType.Map:
+                case SceneType.Map://游戏逻辑服
                     scene.AddComponent<UnitComponent>();
                     scene.AddComponent<AOIManagerComponent>();
                     break;
-                case SceneType.Location:
+                case SceneType.Location://定位服
                     scene.AddComponent<LocationComponent>();
                     break;
-                case SceneType.Account:
+                case SceneType.Account://账号服
                     scene.AddComponent<NetKcpComponent, IPEndPoint, int>(startSceneConfig.OuterIPPort, SessionStreamDispatcherType.SessionStreamDispatcherServerOuter);
                     Log.Info("创建账号服");
                     //scene.AddComponent<DBManagerComponent>();
@@ -46,7 +46,7 @@ namespace ET
                     scene.AddComponent<AccountSessionsComponent>();
                     scene.AddComponent<ServerInfoManagerComponent>();
                     break;
-                case SceneType.LoginCenter:
+                case SceneType.LoginCenter://登录中心服
                     scene.AddComponent<LoginInfoRecordComponent>();
                     break;
             }
