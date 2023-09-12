@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ET
 {
+    [FriendClass(typeof(SessionPlayerComponent))]
     public class L2G_DisconnectGateUnitHandler : AMActorRpcHandler<Scene, L2G_DisconnectGateUnit, G2L_DisconnectGateUnit>
     {
         protected async override ETTask Run(Scene scene, L2G_DisconnectGateUnit request, G2L_DisconnectGateUnit response, Action reply)
@@ -24,6 +25,10 @@ namespace ET
                 Session gateSession = player.ClientSession; 
                 if (gateSession != null && !gateSession.IsDisposed)
                 {
+                    if (gateSession.GetComponent<SessionPlayerComponent>() != null)
+                    {
+                        gateSession.GetComponent<SessionPlayerComponent>().IsLoginAgain = true;
+                    }
                     gateSession.Send(new A2C_Disconnect(){Error = ErrorCode.ERR_OtherAccountLogin});
                     gateSession?.Disconnect().Coroutine();
                 }
