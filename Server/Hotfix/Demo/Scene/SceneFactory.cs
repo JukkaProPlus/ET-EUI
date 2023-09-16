@@ -2,6 +2,7 @@
 
 using System.Net;
 using System.ServiceModel.Security;
+using ET.UnitCache;
 
 namespace ET
 {
@@ -48,6 +49,9 @@ namespace ET
                     break;
                 case SceneType.LoginCenter://登录中心服
                     scene.AddComponent<LoginInfoRecordComponent>();
+                    break;
+                case SceneType.UnitCache:
+                    scene.AddComponent<UnitCacheComponent>();
                     break;
             }
 
