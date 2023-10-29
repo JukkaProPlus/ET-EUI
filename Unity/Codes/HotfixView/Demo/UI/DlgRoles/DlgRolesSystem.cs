@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Xml.Schema;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -109,13 +110,14 @@ namespace ET
                     Log.Error(code.ToString());
                     return;
                 }
-
+                // self.ZoneScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Main);
+                self.ZoneScene().GetComponent<UIComponent>().CloseWindow(WindowID.WindowID_Roles);
             }
             catch (Exception e)
             {
                 Log.Error(e.ToString());
             }
-            await ETTask.CompletedTask;
+            // await ETTask.CompletedTask;
             //self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_Roles);
             //self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Lobby);
         }

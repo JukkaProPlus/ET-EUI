@@ -293,7 +293,7 @@ message UnitCache2Other_AddOrUpdateUnit // IActorResponse
 }
 
 //获取Unit缓存
-//ReponseType UnitCache2Other_GetUnit
+//ResponseType UnitCache2Other_GetUnit
 message Other2UnitCache_GetUnit	// IActorRequest
 {
 	int32 RpcId = 90;

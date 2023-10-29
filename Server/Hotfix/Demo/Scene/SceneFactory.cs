@@ -50,7 +50,8 @@ namespace ET
                 case SceneType.LoginCenter://登录中心服
                     scene.AddComponent<LoginInfoRecordComponent>();
                     break;
-                case SceneType.UnitCache:
+                case SceneType.UnitCache://单元缓存服
+                    Log.Info("创建单元缓存服20231029");
                     scene.AddComponent<UnitCacheComponent>();
                     break;
             }

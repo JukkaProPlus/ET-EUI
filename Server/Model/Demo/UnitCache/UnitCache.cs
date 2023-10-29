@@ -6,6 +6,7 @@ namespace ET.UnitCache
     {
         
     }
+    
     public class UnitCache:Entity, IAwake, IDestroy
     {
         public string key;

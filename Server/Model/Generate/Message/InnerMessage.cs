@@ -592,7 +592,7 @@ namespace ET
 	}
 
 //获取Unit缓存
-//ReponseType UnitCache2Other_GetUnit
+	[ResponseType(nameof(UnitCache2Other_GetUnit))]
 	[Message(InnerOpcode.Other2UnitCache_GetUnit)]
 	[ProtoContract]
 	public partial class Other2UnitCache_GetUnit: Object, IActorRequest
