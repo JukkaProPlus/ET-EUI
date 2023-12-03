@@ -94,7 +94,8 @@ namespace ET
                         
                         //从数据库或者缓存中加载出Unit实体及其相关组件
                         (bool isNewPlayer, Unit unit) = await UnitHelper.LoadUnit(player);
-                        unit.AddComponent<UnitGateComponent, long>(session.InstanceId);
+                        // unit.AddComponent<UnitGateComponent, long>(session.InstanceId);
+                        unit.AddComponent<UnitGateComponent, long>(player.InstanceId);
                         
                         //玩家Unit上线后的初始化操作
                         await UnitHelper.InitUnit(unit, isNewPlayer);
