@@ -12,6 +12,7 @@ namespace ET
             zoneScene.AddComponent<ResourcesLoaderComponent>();
         
             zoneScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Login);
+            // zoneScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MyTest);
         }
     }
 }

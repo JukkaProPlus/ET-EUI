@@ -11,5 +11,6 @@ namespace ET
     	WindowID_Server,    //服务器列表界面
 		WindowID_Roles,     //角色列表界面
 		WindowID_Loading,   //Loading界面
+		WindowID_MyTest,	//测试界面
 	}
 }

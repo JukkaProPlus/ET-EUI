@@ -13,6 +13,11 @@ namespace ET
             zoneScene.AddComponent<AccountInfoComponent>();
             zoneScene.AddComponent<ServerInfosComponent>();
             zoneScene.AddComponent<RoleInfosComponent>();
+            // Log.Info("CCCCCCCCCCCCCCCCCCCCC");
+            // Log.Info(zoneScene.DomainScene().ToString());
+            // Log.Info((zoneScene.DomainScene() == zoneScene).ToString());
+            // Log.Info((zoneScene.DomainScene() == parent).ToString());
+            // Log.Info("DDDDDDDDDDDDDDDDDDDD");
             Game.EventSystem.Publish(new EventType.AfterCreateZoneScene() {ZoneScene = zoneScene});
             return zoneScene;
         }
