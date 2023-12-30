@@ -1,11 +1,11 @@
 ﻿using System;
-using ET.UnitCache;
+using ET;
 using MongoDB.Bson.Serialization.Attributes;
 using UnityEngine;
 
 namespace ET
 {
-    public sealed class Unit: Entity, IAwake<int>, IUnitCache
+    public sealed class Unit: Entity, IAwake<int>//, IUnitCache
     {
         public int ConfigId; //配置表id
 

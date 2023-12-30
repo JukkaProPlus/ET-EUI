@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using ET.UnitCache;
+using ET;
 
 namespace ET.Handler
 {
-    [FriendClassAttribute(typeof(ET.UnitCache.UnitCacheComponent))]
+    [FriendClassAttribute(typeof(ET.UnitCacheComponent))]
     public class Other2UnitCache_GetUnitHandler : AMActorRpcHandler<Scene, Other2UnitCache_GetUnit, UnitCache2Other_GetUnit>
     {
         protected override async ETTask Run(Scene scene, Other2UnitCache_GetUnit request, UnitCache2Other_GetUnit response, Action reply)

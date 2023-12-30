@@ -80,7 +80,7 @@ namespace ET
             if (isNewUnit)
             {
                 unit = UnitFactory.Create(gateMapComponent.Scene, player.Id, UnitType.Player);
-                UnitCacheHelper.AddOrUpdateUnitCache(unit).Coroutine();
+                UnitCacheHelper.AddOrUpdateUnitAllCache(unit);//.Coroutine();
             }
 
             return (isNewUnit, unit);

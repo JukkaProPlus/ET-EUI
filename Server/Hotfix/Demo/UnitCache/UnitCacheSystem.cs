@@ -1,8 +1,8 @@
 ﻿namespace ET
 {
-    public class UnitCacheDestroySystem: DestroySystem<UnitCache.UnitCache>
+    public class UnitCacheDestroySystem: DestroySystem<UnitCache>
     {
-        public override void Destroy(UnitCache.UnitCache self)
+        public override void Destroy(UnitCache self)
         {
             foreach (Entity entity in self.CacheComponentDictionary.Values)
             {
@@ -13,10 +13,10 @@
         }
     }
     
-    [FriendClassAttribute(typeof(ET.UnitCache.UnitCache))]
+    [FriendClassAttribute(typeof(UnitCache))]
     public static class UnitCacheSystem
     {
-        public static void AddOrUpdate(this UnitCache.UnitCache self, Entity entity)
+        public static void AddOrUpdate(this UnitCache self, Entity entity)
         {
             if (entity == null)
             {
@@ -35,7 +35,7 @@
             self.CacheComponentDictionary.Add(entity.Id, entity);
         }
 
-        public static async ETTask<Entity> Get(this UnitCache.UnitCache self, long unitId)
+        public static async ETTask<Entity> Get(this UnitCache self, long unitId)
         {
             if (!self.CacheComponentDictionary.TryGetValue(unitId, out Entity entity))
             {
@@ -49,7 +49,7 @@
             return entity;
         }
 
-        public static void Delete(this UnitCache.UnitCache self, long id)
+        public static void Delete(this UnitCache self, long id)
         {
             if (self.CacheComponentDictionary.TryGetValue(id, out Entity entity))
             {

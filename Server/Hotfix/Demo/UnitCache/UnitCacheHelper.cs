@@ -1,5 +1,5 @@
 ﻿using System;
-using ET.UnitCache;
+using ET;
 
 namespace ET
 {
@@ -30,6 +30,21 @@ namespace ET
 
             int indexOf = queryUnit.ComponentNameList.IndexOf(nameof (Unit));
             Unit unit = queryUnit.EntityList[indexOf] as Unit;
+            if (unit == null)
+            {
+                return null;
+            }
+
+            scene.GetComponent<UnitComponent>().AddChild(unit);
+            foreach (var entity in queryUnit.EntityList)
+            {
+                if (entity == null || entity is Unit)
+                {
+                    continue;
+                }
+
+                unit.AddComponent(entity);
+            }
             return unit;
         }
 

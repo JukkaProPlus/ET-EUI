@@ -1,10 +1,10 @@
-﻿using ET.UnitCache;
-using System;
+﻿using System;
+using System.Linq;
 using MongoDB.Driver.Core.Events;
 
 namespace ET
 {
-    [FriendClassAttribute(typeof(ET.UnitCache.UnitCache))]
+    [FriendClassAttribute(typeof(UnitCache))]
     [ObjectSystem]
     public class UnitCacheComponentAwakeSystem : AwakeSystem<UnitCacheComponent>
     {
@@ -21,7 +21,7 @@ namespace ET
 
             foreach (string key in self.UnitCacheKeyList)
             {
-                UnitCache.UnitCache unitCache = self.AddChild<UnitCache.UnitCache>();
+                UnitCache unitCache = self.AddChild<UnitCache>();
                 unitCache.key = key;
                 self.UnitCaches.Add(key, unitCache);
             }
@@ -31,7 +31,7 @@ namespace ET
     {
         public override void Destroy(UnitCacheComponent self)
         {
-            foreach (UnitCache.UnitCache unitCache in self.UnitCaches.Values)
+            foreach (UnitCache unitCache in self.UnitCaches.Values)
             {
                 unitCache?.Dispose();
             }
@@ -41,8 +41,8 @@ namespace ET
     }
 
 
-    [FriendClassAttribute(typeof(ET.UnitCache.UnitCacheComponent))]
-    [FriendClassAttribute(typeof(ET.UnitCache.UnitCache))]
+    [FriendClassAttribute(typeof(UnitCacheComponent))]
+    [FriendClassAttribute(typeof(UnitCache))]
     public static class UnitCacheComponentSystem
     {
         public static async ETTask AddOrUpdate(this UnitCacheComponent self, long id, ListComponent<Entity> entityList)
@@ -52,9 +52,9 @@ namespace ET
                 foreach (Entity entity in entityList)
                 {
                     string key = entity.GetType().Name;
-                    if (!self.UnitCaches.TryGetValue(key, out UnitCache.UnitCache unitCache))
+                    if (!self.UnitCaches.TryGetValue(key, out UnitCache unitCache))
                     {
-                        unitCache = self.AddChild<UnitCache.UnitCache>();
+                        unitCache = self.AddChild<UnitCache>();
                         unitCache.key = key;
                         self.UnitCaches.Add(key, unitCache);
                     }
@@ -74,9 +74,9 @@ namespace ET
         public static async ETTask<T> Get<T>(this UnitCacheComponent self, long unitId) where T : Entity
         {
             string key = typeof (T).Name;
-            if (!self.UnitCaches.TryGetValue(key, out UnitCache.UnitCache unitCache))
+            if (!self.UnitCaches.TryGetValue(key, out UnitCache unitCache))
             {
-                unitCache = self.AddChild<UnitCache.UnitCache>();
+                unitCache = self.AddChild<UnitCache>();
                 unitCache.key = key;
                 self.UnitCaches.Add(key, unitCache);
             }
@@ -86,9 +86,9 @@ namespace ET
 
         public static async ETTask<Entity> Get(this UnitCacheComponent self, long unitId, string key)
         {
-            if (!self.UnitCaches.TryGetValue(key, out UnitCache.UnitCache unitCache))
+            if (!self.UnitCaches.TryGetValue(key, out UnitCache unitCache))
             {
-                unitCache = self.AddChild<UnitCache.UnitCache>();
+                unitCache = self.AddChild<UnitCache>();
                 unitCache.key = key;
                 self.UnitCaches.Add(key, unitCache);
             }
@@ -97,7 +97,7 @@ namespace ET
 
         public static void Delete(this UnitCacheComponent self, long unitId)
         {
-            foreach (UnitCache.UnitCache cache in self.UnitCaches.Values)
+            foreach (UnitCache cache in self.UnitCaches.Values)
             {
                 cache.Delete(unitId);
             }
